@@ -1,0 +1,7 @@
+ 
+#Installing packages needed for our game:
+ brew install hg sdl sdl_image sdl_ttf sdl_mixer portmidi
+ pip3 install --user hg+http://bitbucket.org/pygame/pygame
+
+ #Getting free assets for my game from here:
+ http://pixabay.com/.
