@@ -6,4 +6,14 @@ class  Settings():
 		self.bg_color = (23, 80, 166)
 		self.battleship_width = 22
 		self.battleship_height = 45
-		self.battleship_side_move_distance = 3
+		self.battleship_side_move_distance = 10
+
+		self.bullet_speed_factor = 30
+		self.bullet_width = 3
+		self.bullet_height = 15
+		self.bullet_color = 173, 255, 47
+		self.bullets_allowed = 10
+
+		# 1 - right; -1 left
+		self.fleet_direction = 1
+		self.fleet_drop_speed = 5
