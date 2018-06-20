@@ -7,6 +7,8 @@ from settings import Settings
 from ship import Ship
 from bullet import Bullet
 
+from time import sleep
+
 def check_events(ai_settings, ship, bullets):
 
 	#Track keyboard and mouse events:
@@ -46,7 +48,7 @@ def move_ship(ship, ai_settings):
 		if(ship.rect.y < ai_settings.screen_height - ai_settings.battleship_height):
 			ship.rect.centery += ai_settings.battleship_side_move_distance	
 
-def create_fleet(ai_settings, screen, aliens):
+def create_fleet(ai_settings, screen, ship, aliens):
 		number_alliens_x = get_number_aliens_x(ai_settings)
 
 		number_rows = get_number_rows(ai_settings)
@@ -72,9 +74,12 @@ def get_number_rows(ai_settings):
 	number_rows = int(available_space_y / (2 * ai_settings.battleship_height))
 	return number_rows
 
-def update_aliens(ai_settings, aliens):
+def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
 	check_fleet_edges(ai_settings, aliens)
 	aliens.update()
+
+	if pygame.sprite.spritecollideany(ship, aliens):
+		ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
 
 def check_fleet_edges(ai_settings, aliens):
 	for alien in aliens.sprites():
@@ -99,7 +104,7 @@ def update_screen(ai_settings, screen, ship, aliens, bullets):
 	screen.fill(ai_settings.bg_color)
 	ship.draw()
 	aliens.draw(screen)
-	update_bullets(bullets)
+	update_bullets(ai_settings, screen, ship, aliens, bullets)
 
 	#Make the most recently drawn screen visible:
 	pygame.display.flip()
@@ -109,11 +114,32 @@ def fire_bullet(bullets, ai_settings, screen, ship):
 			new_bullet = Bullet(ai_settings, screen, ship)
 			bullets.add(new_bullet)
 
-def update_bullets(bullets):
+def update_bullets(ai_settings, screen, ship, aliens, bullets):
 	for bullet in bullets.sprites():
 		bullet.draw_bullet()
 
 	bullets.update()
+
+	check_bullet_alien_collisions(ai_settings, screen, ship, bullets, aliens)
+
+
+def check_bullet_alien_collisions(ai_settings, screen, ship, bullets, aliens):
+	collisions = pygame.sprite.groupcollide(bullets, aliens, False, True)
+
+	if len(aliens) == 0:
+		bullets.empty()
+		create_fleet(ai_settings, screen, ship, aliens)
+
+def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
+	stats.ships_left -= 1
+	# Empty the list of aliens and bullets.
+	aliens.empty()
+	bullets.empty()
+	# Create a new fleet and center the ship.
+	create_fleet(ai_settings, screen, ship, aliens)
+	ship.center_ship()
+	# Pause.
+	sleep(0.5)		
 
 
 

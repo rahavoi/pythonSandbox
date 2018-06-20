@@ -9,11 +9,13 @@ class  Settings():
 		self.battleship_side_move_distance = 10
 
 		self.bullet_speed_factor = 30
-		self.bullet_width = 3
+		self.bullet_width = 300
 		self.bullet_height = 15
 		self.bullet_color = 173, 255, 47
 		self.bullets_allowed = 10
 
 		# 1 - right; -1 left
 		self.fleet_direction = 1
-		self.fleet_drop_speed = 5
+		self.fleet_drop_speed = 20
+
+		self.ship_limit = 3

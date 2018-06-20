@@ -8,6 +8,8 @@ from alien import Alien
 from settings import Settings
 from ship import Ship
 
+from game_stats import GameStats
+
 def run_game():
 	#Initialize game
 	pygame.init()
@@ -19,16 +21,18 @@ def run_game():
 	# Make a ship.
 	ship = Ship(screen)	
 
+	stats = GameStats(ai_settings)
+
 	bullets = Group()
 	aliens = Group()
 
-	gf.create_fleet(ai_settings, screen, aliens)
+	gf.create_fleet(ai_settings, screen, ship, aliens)
 
 	#Main loop for the game:
 	while  True:
 		gf.check_events(ai_settings, ship, bullets)
 		gf.update_screen(ai_settings, screen, ship, aliens, bullets)
-		gf.update_aliens(ai_settings, aliens)
+		gf.update_aliens(ai_settings, stats, screen, ship, aliens, bullets)
 
 		for bullet in bullets.copy():
 			if bullet.rect.bottom <= 0:
